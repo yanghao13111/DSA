@@ -1,4 +1,4 @@
-# Problem 1 - Greatest Common Divisor of Big Integers
+# Problem - Greatest Common Divisor of Big Integers
 
 ## Problem Description
 The greatest common divisor gcd(a,b) between two positive integers a and b is defined as the largest positive integer that divides both a and b without a remainder. Mathematically speaking, for any positive integers a and b, gcd(a, b) satisfies the following properties:

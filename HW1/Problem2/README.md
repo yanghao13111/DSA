@@ -1,4 +1,4 @@
-# Problem 2 - Cycling Teams and Bakeries (100 pts)
+# Problem - Cycling Teams and Bakeries (100 pts)
 
 ## Problem Description
 Cycling teams resemble swarms of locusts, swiftly moving through and consuming everything in their path. Seven city consists of a street grid with n horizontal roads and m vertical roads. The horizontal roads are numbered by their position relative to the north, indexed by i, while the vertical roads are numbered by their position relative to the west, indexed by j. The distance between any two consecutive horizontal roads (i and i + 1) is equal to the distance between any two consecutive vertical roads (j and j + 1), for all 1 ≤ i ≤ n − 1 and 1 ≤ j ≤ m − 1. At every intersection of a horizontal road i and a vertical road j, there is an open bakery denoted by bij. Based on its Google Map reviews and ratings, each bakery is assigned a unique rank uij between 1 and mn. Furthermore, each bakery is initially stocked with a certain number of toasts, denoted by tij.

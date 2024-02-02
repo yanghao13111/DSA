@@ -1,4 +1,4 @@
-# Problem 2 - Mega Knights
+# Problem - Mega Knights
 
 ## Problem Description
 In a realm, n mega knights are positioned at n unique locations. Each mega knight Ki (1 ≤ i ≤ n) can inflict ai damage (attack points) when attacking and possesses hi health points, indicating the maximum damage the knight can sustain.

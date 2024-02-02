@@ -1,4 +1,4 @@
-# Problem 2 - Magical Cats
+# Problem - Magical Cats
 
 ## Problem Description
 Demeter Sphynx Abyssinian (a.k.a. DSA) is a passionate cat lover who shares zir home with hundreds of thousands of furry felines. These adorable creatures consume tons of food every day, so DSA wants to gather statistics in order to formulate a feeding plan for the future.

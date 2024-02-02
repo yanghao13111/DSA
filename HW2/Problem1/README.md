@@ -1,4 +1,4 @@
-# Problem 1 - Everyone Loves Sweetmelons
+# Problem - Everyone Loves Sweetmelons
 
 - Time Limit: 1 s
 - Memory Limit: 2048 KB

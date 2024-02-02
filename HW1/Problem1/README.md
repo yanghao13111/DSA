@@ -1,4 +1,4 @@
-# Problem 1 - King of DSA
+# Problem - King of DSA
 
 - Time Limit: 1 s
 - Memory Limit: 2048 KB
