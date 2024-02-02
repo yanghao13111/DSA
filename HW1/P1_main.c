@@ -7,8 +7,6 @@ typedef struct {
     int attack;
 } node;
 
-int getMax(node [], int);
-
 int main(){
     int player = 0;            
     int capacity = 0;
@@ -39,7 +37,7 @@ int main(){
             continue;
         }
 
-        // the remaining rounds
+        // the remaining rounds using binary method
         l = 0;
         r = size;
         while (l <= r){
@@ -82,6 +80,7 @@ int main(){
         // revolution
         if (size > capacity){
             printf("%d ", power[0].indices);
+            // replace iteratively move the index to the left
             memmove(&power[0], &power[1], capacity * sizeof(node));
             size--;
         }
