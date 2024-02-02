@@ -1,62 +1,70 @@
-# Problem 1 - Greatest Common Divisor of Big Integers
+# Problem 1 - Everyone Loves Sweetmelons
+
+- Time Limit: 1 s
+- Memory Limit: 2048 KB
 
 ## Problem Description
-The greatest common divisor gcd(a,b) between two positive integers a and b is defined as the largest positive integer that divides both a and b without a remainder. Mathematically speaking, for any positive integers a and b, gcd(a, b) satisfies the following properties:
-- a ≡ 0 mod gcd(a,b)
-- b ≡ 0 mod gcd(a,b)
-- ∀k ∈ N and k > gcd(a,b),(a̸≡0 mod k)or(b̸ ≡ 0 mod k)
+Recall the magical fairy in the house of Demeter Sphynx Abyssinian (DSA)? The fairy's magic spell is represented by a string S, consisting of uppercase English alphabets with a length of N. Each substring of S, termed a segment of the spell, generates a magic effect if it exactly matches the pattern P, which has a length of M. Conversely, a segment may produce the opposite effect if it is a rotation of P. For example, for a string A(A = c1c2...cn) consisting of n alphabets, ci...cn + c1...ci−1 is considered a rotation of A for any i ∈ [2, n]. To assist the fairy in debugging zir magic spell, can you calculate the total number of segments in zir spell that may generate either the original or the opposite magic effect?
 
-GCD is a very powerful tool in modern cryptography, and when the target integers to be calculated are small (less than 10^8), GCD can be calculated in a few seconds with a naïve method. However, the numbers in modern cryptography require at least 512 digits to prevent attackers from using a brute-force method to derive the secret key. This required number is too large for the naïve methods to calculate GCD in a reasonable time and the numbers exceed the limit of even long long in the C language. In this problem, we will guide you to calculate the GCD of two big integers efficiently.
+### Input
 
-### Input Format
-One line containing two positive integers, a and b.
+The first line contains two integers N and M. The second line contains the magic spell string S, with a length of N. The third line contains the pattern P, with a length of M.
 
-### Output Format
-Please output a positive integer representing gcd(a, b).
+### Output
+
+Output the total number as an integer in a single line.
 
 ### Constraints
-- 0 < a,b < 10^256.
 
-### Subtasks
-1. 0 < a, b < 10^6 . Note that you may not need the Binary Algorithm, or at least not the Binary Algorithm on BigInt, to solve this subtask.
-2. 0 < b < 10^6
-3. no other constraints
+- 1 ≤ M ≤ N ≤ 10^6
+- S and P consist of only uppercase English letters.
+
+### Subtask 1 (10 pts)
+
+- 1 ≤ N ≤ 10^4
+- 1 ≤ M ≤ 10^2
+
+### Subtask 2 (15 pts)
+
+- N = M
+
+### Subtask 3 (15 pts)
+
+- 1 ≤ N × M ≤ 2 × 10^7
+
+### Subtask 4 (60 pts)
+
+- No other constraints.
 
 ### Sample Input 1
-20230228 82203202
+7 5
+DEABCDE
+ABCDE
+
 
 ### Sample Output 1
-2
+3
 
-### Sample Input 2
-987654321987654321987654321 123456789123456789123456789
+### Hints
 
-### Sample Output 2
-9000000009000000009
+- Substrings of length M in S are [DEABC, EABCD, ABCDE]. The first two are rotations of P, and the last one equals P.
 
 ## Program Analysis
 
-旨在計算兩個超出標準整型範圍的大整數的最大公約數（GCD）。在處理大數字的背景下，包括動態記憶體分配、陣列操作和算法問題解決等幾個關鍵的程式設計概念的應用。以下是對其主要function的分析：
+實現尋找特定模式P或其旋轉形式在給定的魔法咒語字符串S中出現的所有可能段落的總數。為了達到這一目的，採用了Rabin-Karp算法的變種來處理字符串匹配的問題，並通過哈希表來加速匹配過程。
 
 ### Main Function
-- 初始化字符陣列 `a` 和 `b` 以存儲輸入數字作為字符串。
-- 確定哪個數字較小並將兩個字符串轉換為整數陣列以進行處理。
-- 調用 `gcd` 函數計算兩個數字的GCD。
+- 初始化變量並讀取輸入，包括魔法咒語S和模式P的字符串以及它們的長度N和M。
+- 對模式P進行預處理，創建一個包含P及其自身連接形式的字符串，以便後續計算其所有可能的旋轉形式的哈希值。
+- 通過四個不同的質數創建四個哈希表，以便於後續進行更加準確的字符串匹配。
 
 ### Key Functions
-- `checkSize`：比較兩個字符串的大小（長度）以確定哪一個代表較小的數字。
-- `toInt`：將數字的字符串表示轉換為整數陣列，每個元素存儲單個數字。
-- `calLength`：計算存儲在整數陣列中的數字的實際長度，忽略用於標記未使用位置的任何尾隨 `-1`。
-- `swap`：交換兩個整數陣列的內容。
-- `divide`：將以整數陣列表示的數字除以 2，用於二進制GCD算法。
-- `multiply`：將以整數陣列表示的數字乘以一個整數，用於在重複除以 2 之後調整最終的GCD。
-- `subtraction`：從另一個數字中減去一個數字（以整數陣列表示），是二進制GCD算法中的一步。
-- `gcd`：實現二進制GCD算法，使用輔助函數進行如除以 2 和減法等操作。
+- `build_hash`：為模式P的每個可能的旋轉形式計算哈希值並存儲在哈希表中。
 
 ### Algorithmic Approach
-- 使用二進制GCD算法，該算法對於大數字比傳統的歐幾里得算法更有效。
-- 重複地將兩個數字除以 2（如果它們是偶數），從較大的數字中減去較小的數字，並在必要時交換它們，直到其中一個數字變為 0。然後通過 2^k 的因子（其中 k 是兩個數字都可以被 2 整除的次數）調整GCD。
+- 使用Rabin-Karp算法的思想，通過計算魔法咒語S中每個長度為M的子字符串的哈希值並與模式P的哈希值進行比較，來確定是否匹配或為旋轉形式匹配。
+- 利用哈希表來存儲模式P的所有可能旋轉形式的哈希值，從而實現快速查找和匹配。
 
 ### Efficiency Considerations
-- 通過對整數陣列而不是C中的內建整型進行操作，可以處理遠大於標準C數據類型通常支持的數字。
-- 使用動態記憶體分配（`malloc`）創建足夠大的整數陣列來存儲輸入數字的數字，以便在沒有溢出問題的情況下計算它們的GCD。
+- 透過使用多個哈希表來降低偽陽性匹配的可能性，從而提高算法的準確性和效率。
+- 採用字符到數字的映射和模數運算來有效地計算和更新哈希值，以適應字符串的旋轉特性。

@@ -1,62 +1,65 @@
-# Problem 1 - Greatest Common Divisor of Big Integers
+# Problem 2 - Mega Knights
 
 ## Problem Description
-The greatest common divisor gcd(a,b) between two positive integers a and b is defined as the largest positive integer that divides both a and b without a remainder. Mathematically speaking, for any positive integers a and b, gcd(a, b) satisfies the following properties:
-- a ≡ 0 mod gcd(a,b)
-- b ≡ 0 mod gcd(a,b)
-- ∀k ∈ N and k > gcd(a,b),(a̸≡0 mod k)or(b̸ ≡ 0 mod k)
+In a realm, n mega knights are positioned at n unique locations. Each mega knight Ki (1 ≤ i ≤ n) can inflict ai damage (attack points) when attacking and possesses hi health points, indicating the maximum damage the knight can sustain.
 
-GCD is a very powerful tool in modern cryptography, and when the target integers to be calculated are small (less than 10^8), GCD can be calculated in a few seconds with a naïve method. However, the numbers in modern cryptography require at least 512 digits to prevent attackers from using a brute-force method to derive the secret key. This required number is too large for the naïve methods to calculate GCD in a reasonable time and the numbers exceed the limit of even long long in the C language. In this problem, we will guide you to calculate the GCD of two big integers efficiently.
+Upon receiving an attack command, a mega knight Ka summons all knights at his location to advance towards the target mega knight Ks, engaging in a collective assault. The area-effect attack reduces the health points of all knights at Ks's location by the total attack points of the assailants. Any knight whose health drops to 0 or below is deemed defeated. Post-attack, the assailants occupy Ks's position.
+
+A fallen knight cannot initiate or become the target of attacks. Should such a command arise, it results in no action. Similarly, if Ka and Ks share the same location prior to the attack, the command is disregarded.
+
+Given m attack instructions, ascertain the total successful attacks executed by each mega knight, including both direct commands and instances where the knight joins another's attack.
 
 ### Input Format
-One line containing two positive integers, a and b.
+The initial line specifies n and m—the number of mega knights and attack rounds, separated by a space. The subsequent line lists n positive integers h1, h2, ..., hn, denoting each knight's health points. The following line presents n positive integers a1, a2, ..., an—each knight's attack points. Each of the m ensuing lines contains two positive integers, Ka and Ks, indicating the attacking and target knights, respectively.
 
 ### Output Format
-Please output a positive integer representing gcd(a, b).
+Produce a line with n integers, separated by spaces, where the i-th integer reflects the total successful attacks by the i-th mega knight.
 
 ### Constraints
-- 0 < a,b < 10^256.
+- 1 ≤ n, m ≤ 2 × 10^5
+- 1 ≤ ai, hi ≤ 10^9
+- 1 ≤ Ka, Ks ≤ n
+- Ka ≠ Ks
 
 ### Subtasks
-1. 0 < a, b < 10^6 . Note that you may not need the Binary Algorithm, or at least not the Binary Algorithm on BigInt, to solve this subtask.
-2. 0 < b < 10^6
-3. no other constraints
+
+#### Subtask 1 (15 pts)
+- 1 ≤ n, m ≤ 10^3
+#### Subtask 2 (20 pts)
+- It is guaranteed no mega knight will perish.
+#### Subtask 3 (65 pts)
+- No additional constraints.
 
 ### Sample Input 1
-20230228 82203202
+6 5  
+7 7 7 7 7 14   
+3 1 4 1 5 9   
+2 3  
+2 1  
+4 3  
+1 6  
+3 6  
 
 ### Sample Output 1
-2
-
-### Sample Input 2
-987654321987654321987654321 123456789123456789123456789
-
-### Sample Output 2
-9000000009000000009
+1 3 2 2 0 0
 
 ## Program Analysis
 
-旨在計算兩個超出標準整型範圍的大整數的最大公約數（GCD）。在處理大數字的背景下，包括動態記憶體分配、陣列操作和算法問題解決等幾個關鍵的程式設計概念的應用。以下是對其主要function的分析：
+模擬了一個涉及巨型騎士、攻擊指令和騎士間互動的復雜場景。通過結構化數據跟踪每個騎士的攻擊點、健康點和成功攻擊次數，以及騎士死亡的狀態。
 
 ### Main Function
-- 初始化字符陣列 `a` 和 `b` 以存儲輸入數字作為字符串。
-- 確定哪個數字較小並將兩個字符串轉換為整數陣列以進行處理。
-- 調用 `gcd` 函數計算兩個數字的GCD。
+- 初始化變量並讀取巨型騎士的數量、健康點、攻擊點和攻擊指令。
+- 根據指令更新騎士的狀態，包括計算攻擊造成的傷害、確定騎士的生死狀態，並在攻擊後更新騎士的位置。。
 
 ### Key Functions
-- `checkSize`：比較兩個字符串的大小（長度）以確定哪一個代表較小的數字。
-- `toInt`：將數字的字符串表示轉換為整數陣列，每個元素存儲單個數字。
-- `calLength`：計算存儲在整數陣列中的數字的實際長度，忽略用於標記未使用位置的任何尾隨 `-1`。
-- `swap`：交換兩個整數陣列的內容。
-- `divide`：將以整數陣列表示的數字除以 2，用於二進制GCD算法。
-- `multiply`：將以整數陣列表示的數字乘以一個整數，用於在重複除以 2 之後調整最終的GCD。
-- `subtraction`：從另一個數字中減去一個數字（以整數陣列表示），是二進制GCD算法中的一步。
-- `gcd`：實現二進制GCD算法，使用輔助函數進行如除以 2 和減法等操作。
+- `find_set`&`union_set`：實現並查集操作，用於管理騎士間的聯合攻擊和位置聚集。
+- `compare`：在min heap操作中使用，幫助維護騎士的健康狀態和攻擊效果。
 
 ### Algorithmic Approach
-- 使用二進制GCD算法，該算法對於大數字比傳統的歐幾里得算法更有效。
-- 重複地將兩個數字除以 2（如果它們是偶數），從較大的數字中減去較小的數字，並在必要時交換它們，直到其中一個數字變為 0。然後通過 2^k 的因子（其中 k 是兩個數字都可以被 2 整除的次數）調整GCD。
+
+- 採用disjointed set和min heap結構來有效管理騎士群體的動態變化，包括攻擊、死亡和位置變更。
+- 透過迭代更新過程來處理每個攻擊指令，計算攻擊結果並更新相關騎士的狀態和統計。
 
 ### Efficiency Considerations
-- 通過對整數陣列而不是C中的內建整型進行操作，可以處理遠大於標準C數據類型通常支持的數字。
-- 使用動態記憶體分配（`malloc`）創建足夠大的整數陣列來存儲輸入數字的數字，以便在沒有溢出問題的情況下計算它們的GCD。
+- 使用disjointed set結構減少了對騎士群體動態變化的重複計算，提高了處理大量騎士和攻擊指令的效率。
+- min heap的使用幫助快速確定和更新需要從攻擊中移除的騎士，以及調整騎士間的位置和攻擊力分配。
