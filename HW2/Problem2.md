@@ -1,62 +1,82 @@
-# Problem 1 - Greatest Common Divisor of Big Integers
+# Problem 2 - Magical Cats
 
 ## Problem Description
-The greatest common divisor gcd(a,b) between two positive integers a and b is defined as the largest positive integer that divides both a and b without a remainder. Mathematically speaking, for any positive integers a and b, gcd(a, b) satisfies the following properties:
-- a ≡ 0 mod gcd(a,b)
-- b ≡ 0 mod gcd(a,b)
-- ∀k ∈ N and k > gcd(a,b),(a̸≡0 mod k)or(b̸ ≡ 0 mod k)
+Demeter Sphynx Abyssinian (a.k.a. DSA) is a passionate cat lover who shares zir home with hundreds of thousands of furry felines. These adorable creatures consume tons of food every day, so DSA wants to gather statistics in order to formulate a feeding plan for the future.
 
-GCD is a very powerful tool in modern cryptography, and when the target integers to be calculated are small (less than 10^8), GCD can be calculated in a few seconds with a naïve method. However, the numbers in modern cryptography require at least 512 digits to prevent attackers from using a brute-force method to derive the secret key. This required number is too large for the naïve methods to calculate GCD in a reasonable time and the numbers exceed the limit of even long long in the C language. In this problem, we will guide you to calculate the GCD of two big integers efficiently.
+There are N cats in the house, and each cat living in the ith room has a unique appetite ai. This appetite value represents the amount of food distributed to that cat every day. Furthermore, each cat is associated with a color represented by an integer value bi.
+
+DSA is interested in establishing a correlation between a cat’s color and its appetite. In particular, ze wants to determine the number of cats that have an appetite falling within the range [lj,rj] and possess the color cj.
+
+Nevertheless, there are some greedy cats in the household who desire more food and sneakily exchange their bowls with some unsuspecting cats. To avoid getting caught by DSA, a greedy cat always picks a victim whose appetite is closest to its own from among the cats with larger appetites. Whenever two cats’ bowls are swapped, their appetites are swapped as well, since DSA distributes food based on the size of the bowls. Please note that the cat that has the largest appetite at any point cannot be greedy.
+
+Recently, a magical fairy pays a visit to DSA’s home and casts some spells on the cats. The fairy first selects a particular color cj and then picks the cat with the highest or lowest appetite among all the cats with that color. The chosen cat will then be able to increase its appetite to the highest appetite of all cats plus one, denoted as max0≤i < N(ai) + 1. However, on occasion, the magic may fail, causing the opposite effect that decreases the cat’s appetite to the smallest appetite of all cats minus one, denoted as min0≤i< N (ai) − 1. The selection of the cat with the highest (1) or lowest (0) appetite to receive the magic is represented by sj ∈ {1,0}, and the success (1) or failure (0) of the magic is represented by tj ∈ {1, 0}. It is important to note that a cat’s appetite may become negative as a result of this magic.
+
+Given M mixed steps of DSA’s question-asking, greedy cats’ swapping, and fairy’s magic spells, can you make sure that each of DSA’s questions is answered correctly?
 
 ### Input Format
-One line containing two positive integers, a and b.
+The first line contains two space-separated integers N, M, the number of cats and the number of steps. The cats will be 0-indexed. The second line contains N space-separated integers a0, a1, . . . , aN−1, where ai is the appetite of the ith cat. The third line contains N space-separated integers b0, b1, . . . , bN−1, where bi is the color of the ith cat. Each of the next M lines contains one of the following:
+
+1. cj lj rj: a questioning step (1) followed by three space-separated integers cj, lj, rj, which denote the color, the lower bound, and the upper bound of the question. There can be no cats that are of color cj in a questioning step.
+2. kj: a swapping step (2) followed by an integer kj, which is the index of a greedy cat.
+3. cj sj tj: a magic step (3) followed by three space-separated integers cj, sj, tj, which denotes the color, the direction of the magic, and the success/failure of the magic. We guarantee that a cat with color cj always exists for a magic step.
 
 ### Output Format
-Please output a positive integer representing gcd(a, b).
+For each questioning step, output the answer to the question in a new line.
 
 ### Constraints
-- 0 < a,b < 10^256.
+- 2 ≤ N ≤ 3 × 10^5
+- 1 ≤ M ≤ 3 × 10^5
+- 1 ≤ ai, bi, cj ≤ 10^9
+- 0 ≤ kj < N
+- sj, tj ∈ {0,1}
+- −2 × 10^9 ≤ lj ≤ rj ≤ 2 × 10^9
 
 ### Subtasks
-1. 0 < a, b < 10^6 . Note that you may not need the Binary Algorithm, or at least not the Binary Algorithm on BigInt, to solve this subtask.
-2. 0 < b < 10^6
-3. no other constraints
+
+#### Subtask 1 (10 pts)
+- 1 ≤ M ≤ 10^3
+#### Subtask 2 (10 pts)
+- Only questioning steps.
+#### Subtask 3 (30 pts)
+- Only questioning and swapping steps. Hint: You are highly encouraged to conquer this subtask (or even easier ones) first before solving the problem in general.
+#### Subtask 4 (50 pts)
+- No other constraints.
 
 ### Sample Input 1
-20230228 82203202
-
+6 5   
+2 1 6 4 5 3  
+2 1 3 2 3 3   
+1 2 1 4   
+1 4 3 6   
+2 3   
+1 2 2 3   
+1 3 4 6  
 ### Sample Output 1
-2
-
-### Sample Input 2
-987654321987654321987654321 123456789123456789123456789
-
-### Sample Output 2
-9000000009000000009
+2  
+0  
+1  
+2 
 
 ## Program Analysis
 
-旨在計算兩個超出標準整型範圍的大整數的最大公約數（GCD）。在處理大數字的背景下，包括動態記憶體分配、陣列操作和算法問題解決等幾個關鍵的程式設計概念的應用。以下是對其主要function的分析：
+旨在管理具有獨特食慾和顏色的貓在DSA家庭的複雜情境。處理了查詢貓統計數據、由於貪婪行為而進行的交換操作，以及影響貓食慾的魔法干預。
 
 ### Main Function
-- 初始化字符陣列 `a` 和 `b` 以存儲輸入數字作為字符串。
-- 確定哪個數字較小並將兩個字符串轉換為整數陣列以進行處理。
-- 調用 `gcd` 函數計算兩個數字的GCD。
+- 初始化變量以儲存貓的食慾、顏色、問題、交換和魔法效果的步驟。
+- 讀取N隻貓的食慾和顏色的輸入，接著是M步操作。
+- 將貓組織成數組和鏈表，以便於高效地查詢、更新和追蹤食慾和顏色。
 
 ### Key Functions
-- `checkSize`：比較兩個字符串的大小（長度）以確定哪一個代表較小的數字。
-- `toInt`：將數字的字符串表示轉換為整數陣列，每個元素存儲單個數字。
-- `calLength`：計算存儲在整數陣列中的數字的實際長度，忽略用於標記未使用位置的任何尾隨 `-1`。
-- `swap`：交換兩個整數陣列的內容。
-- `divide`：將以整數陣列表示的數字除以 2，用於二進制GCD算法。
-- `multiply`：將以整數陣列表示的數字乘以一個整數，用於在重複除以 2 之後調整最終的GCD。
-- `subtraction`：從另一個數字中減去一個數字（以整數陣列表示），是二進制GCD算法中的一步。
-- `gcd`：實現二進制GCD算法，使用輔助函數進行如除以 2 和減法等操作。
+- `compare`：幫助按它們的食慾或顏色對貓的數組進行排序，以便於高效查詢。
+- `binarySearch_color`& variant：在結構化數據中進行高效搜索，以找到特定顏色或具有某些範圍食慾的貓。
+- 處理魔法行動和交換的函數：應用邏輯來根據魔法效果或貪婪行為調整貓的食慾，並計算DSA的查詢結果。
 
 ### Algorithmic Approach
-- 使用二進制GCD算法，該算法對於大數字比傳統的歐幾里得算法更有效。
-- 重複地將兩個數字除以 2（如果它們是偶數），從較大的數字中減去較小的數字，並在必要時交換它們，直到其中一個數字變為 0。然後通過 2^k 的因子（其中 k 是兩個數字都可以被 2 整除的次數）調整GCD。
+
+- 利用數組、鏈表和二分搜索算法有效地組織和查詢有關貓的食慾和顏色的數據。
+- 實施排序機制以便於快速查找和更新貓的信息。
+- 通過對數據結構進行特定操作來模擬貪婪行為和魔法干預，相應地更新貓的食慾。
 
 ### Efficiency Considerations
-- 通過對整數陣列而不是C中的內建整型進行操作，可以處理遠大於標準C數據類型通常支持的數字。
-- 使用動態記憶體分配（`malloc`）創建足夠大的整數陣列來存儲輸入數字的數字，以便在沒有溢出問題的情況下計算它們的GCD。
+- 通過排序和二分搜索有效地處理數據，減少了操作的複雜性，確保系統能夠有效地管理大量的貓和步驟。
+- 通過動態更新數據結構，如鏈表，允許實時追踪由於交換或魔法而發生的貓的食慾變化，最小化了全面遍歷或重複計算的需求。
