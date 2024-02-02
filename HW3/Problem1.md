@@ -4,7 +4,9 @@
 - Memory Limit: 2048 KB
 
 ## Problem Description
-Recall the magical fairy in the house of Demeter Sphynx Abyssinian (DSA)? The fairy's magic spell is represented by a string S, consisting of uppercase English alphabets with a length of N. Each substring of S, termed a segment of the spell, generates a magic effect if it exactly matches the pattern P, which has a length of M. Conversely, a segment may produce the opposite effect if it is a rotation of P. For example, for a string A(A = c1c2...cn) consisting of n alphabets, ci...cn + c1...ci−1 is considered a rotation of A for any i ∈ [2, n]. To assist the fairy in debugging zir magic spell, can you calculate the total number of segments in zir spell that may generate either the original or the opposite magic effect?
+Recall the magical fairy in the house of Demeter Sphynx Abyssinian (DSA)? The fairy's magic spell is represented by a string S, consisting of uppercase English alphabets with a length of N. Each substring of S, termed a segment of the spell, generates a magic effect if it exactly matches the pattern P, which has a length of M. Conversely, a segment may produce the opposite effect if it is a rotation of P. For example, for a string A(A = c1c2...cn) consisting of n alphabets, ci...cn + c1...ci−1 is considered a rotation of A for any i ∈ [2, n]. 
+
+To assist the fairy in debugging zir magic spell, can you calculate the total number of segments in zir spell that may generate either the original or the opposite magic effect?
 
 ### Input
 
